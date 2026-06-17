@@ -4,8 +4,18 @@
   padding: 0;
 }
 
+:root {
+  --cell-size: 30px;
+  --layout-gap: 24px;
+  --container-padding: 24px;
+  --panel-width: 200px;
+  --title-size: 2rem;
+  --score-size: 2rem;
+}
+
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,20 +25,27 @@ body {
 }
 
 .game-container {
-  padding: 24px;
+  width: 100%;
+  max-width: 960px;
+  padding: var(--container-padding);
+  padding-top: max(var(--container-padding), env(safe-area-inset-top));
+  padding-right: max(var(--container-padding), env(safe-area-inset-right));
+  padding-bottom: max(var(--container-padding), env(safe-area-inset-bottom));
+  padding-left: max(var(--container-padding), env(safe-area-inset-left));
 }
 
 .title {
   text-align: center;
-  margin-bottom: 24px;
-  font-size: 2rem;
+  margin-bottom: var(--layout-gap);
+  font-size: var(--title-size);
   letter-spacing: 2px;
 }
 
 .game-layout {
   display: flex;
-  gap: 24px;
+  gap: var(--layout-gap);
   align-items: flex-start;
+  justify-content: center;
 }
 
 .board-section {
@@ -36,19 +53,20 @@ body {
   padding: 8px;
   border: 3px solid #4a4a6a;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
 #game-board {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(20, 30px);
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(20, var(--cell-size));
   gap: 1px;
   background-color: #2a2a3a;
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   background-color: #111;
   border: 1px solid #1e1e2e;
 }
@@ -62,10 +80,11 @@ body {
 .piece-L { background-color: #f97316; border-color: #ea580c; }
 
 .info-panel {
-  width: 200px;
+  width: var(--panel-width);
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .score-box,
@@ -84,7 +103,7 @@ body {
 }
 
 .score-value {
-  font-size: 2rem;
+  font-size: var(--score-size);
   font-weight: bold;
   color: #00d9ff;
 }
@@ -148,4 +167,92 @@ kbd {
   border-radius: 4px;
   font-family: inherit;
   font-size: 0.85rem;
+}
+
+/* 태블릿: 보드·패널 세로 배치, 중간 크기 */
+@media (max-width: 900px) {
+  :root {
+    --cell-size: min(calc((100vw - 80px) / 10), 26px);
+    --layout-gap: 20px;
+    --container-padding: 20px;
+    --panel-width: 100%;
+    --title-size: 1.75rem;
+    --score-size: 1.75rem;
+  }
+
+  body {
+    align-items: flex-start;
+  }
+
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-panel {
+    max-width: calc(var(--cell-size) * 10 + 22px);
+  }
+
+  .button-group {
+    flex-direction: row;
+  }
+
+  .button-group button {
+    flex: 1;
+  }
+}
+
+/* 모바일: 화면에 맞춘 작은 보드, 컴팩트 UI */
+@media (max-width: 600px) {
+  :root {
+    --cell-size: min(
+      calc((100vw - 56px) / 10),
+      calc((100dvh - 420px) / 20),
+      22px
+    );
+    --layout-gap: 16px;
+    --container-padding: 12px;
+    --title-size: 1.5rem;
+    --score-size: 1.5rem;
+  }
+
+  .board-section {
+    padding: 6px;
+    border-width: 2px;
+  }
+
+  .score-box,
+  .controls-box {
+    padding: 12px;
+  }
+
+  .controls-box ul {
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  button {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+}
+
+/* PC: 넓은 화면에서 가로 배치·기본 크기 유지 */
+@media (min-width: 901px) {
+  :root {
+    --cell-size: 30px;
+    --layout-gap: 24px;
+    --container-padding: 24px;
+    --panel-width: 200px;
+    --title-size: 2rem;
+    --score-size: 2rem;
+  }
+
+  .game-layout {
+    flex-direction: row;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
 }
